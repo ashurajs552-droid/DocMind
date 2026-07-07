@@ -119,8 +119,20 @@ export default function ChatPane({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch streaming response');
+        let errMsg = 'Failed to fetch streaming response';
+        try {
+          const errorData = await response.json();
+          errMsg = errorData.error || errMsg;
+        } catch {
+          try {
+            const rawText = await response.text();
+            if (rawText) {
+              // Strip HTML tags to keep the error message clean in the chat console
+              errMsg = rawText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 150);
+            }
+          } catch {}
+        }
+        throw new Error(errMsg);
       }
 
       // 5. Decode Edge stream

@@ -1,7 +1,7 @@
 import { createGroq } from '@ai-sdk/groq';
 import { streamText } from 'ai';
 
-export const runtime = 'edge';
+// export const runtime = 'edge';
 
 export async function POST(req: Request) {
   try {
