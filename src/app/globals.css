@@ -1,26 +1,196 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-paper-light: #faf8f5;
+  --color-paper-dark: #0b0a09;
+  --color-ink-light: #181715;
+  --color-ink-dark: #eae6df;
+  
+  --color-forest: #143022;
+  --color-forest-light: #1f4834;
+  --color-forest-dark: #091710;
+  
+  --color-terracotta: #b84e2a;
+  --color-terracotta-light: #d1643f;
+  --color-terracotta-dark: #913a1b;
+  
+  --color-sand: #e4ddcf;
+  --color-sand-light: #f2ede4;
+  --color-sand-dark: #1b1917;
+  --color-sand-muted: #d0c5b4;
+
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+
+  --animate-waveform: waveform 1.2s ease-in-out infinite;
+  --animate-orb-pulse: orb-pulse 6s ease-in-out infinite;
+  --animate-float-slow-a: float-slow-a 15s ease-in-out infinite;
+  --animate-float-slow-b: float-slow-b 20s ease-in-out infinite;
+  --animate-orbit-slow: orbit-slow 25s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes waveform {
+  0%, 100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1.0);
   }
 }
 
+@keyframes orb-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.45;
+  }
+}
+
+@keyframes float-slow-a {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes float-slow-b {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 40px) scale(1.15);
+  }
+}
+
+@keyframes orbit-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(184, 78, 42, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(184, 78, 42, 0.35);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(234, 230, 223, 0.08);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 230, 223, 0.2);
+}
+
+/* Base resets & styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-paper-light);
+  color: var(--color-ink-light);
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark body {
+  background-color: var(--color-paper-dark);
+  color: var(--color-ink-dark);
+}
+
+/* Glassmorphic Cards & Panels */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(228, 221, 207, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+}
+
+.dark .glass-panel {
+  background-color: rgba(27, 25, 23, 0.45);
+  border: 1px solid rgba(234, 230, 223, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Technical Dotted Grid Pattern */
+.tech-grid {
+  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(184, 78, 42, 0.04) 1px, transparent 1px);
+}
+
+.dark .tech-grid {
+  background-image: radial-gradient(circle, rgba(234, 230, 223, 0.02) 1px, transparent 1px);
+}
+
+/* Secure Scan-line Animation */
+@keyframes scanline {
+  0% {
+    top: -5%;
+  }
+  50% {
+    top: 105%;
+  }
+  100% {
+    top: -5%;
+  }
+}
+
+.secure-scan {
+  position: relative;
+  overflow: hidden;
+}
+
+.secure-scan::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, rgba(31, 72, 52, 0.5), transparent);
+  left: 0;
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+.dark .secure-scan::after {
+  background: linear-gradient(to right, transparent, rgba(209, 100, 63, 0.35), transparent);
+}
+
+/* Glow effects */
+.glow-forest {
+  box-shadow: 0 0 40px rgba(31, 72, 52, 0.1);
+}
+
+.glow-terracotta {
+  box-shadow: 0 0 40px rgba(209, 100, 63, 0.08);
+}
+
+.transition-all-custom {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::selection {
+  background-color: rgba(209, 100, 63, 0.18);
+  color: inherit;
 }
