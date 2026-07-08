@@ -99,14 +99,14 @@ export default function DocumentList({
       {/* List Header */}
       <div className="flex items-center justify-between pb-2.5 border-b border-sand-muted/40 dark:border-sand-dark/60">
         <h3 className="font-serif text-sm font-bold text-ink-light dark:text-ink-dark flex items-center gap-2">
-          <Layers size={14} className="text-terracotta" />
+          <Layers size={14} className="text-primary" />
           Active Context
         </h3>
         
         {documents.length > 0 && (
           <button
             onClick={handleSelectAllToggle}
-            className="text-[11px] font-bold text-terracotta hover:text-terracotta-light transition-colors uppercase tracking-wider"
+            className="text-[11px] font-bold text-primary hover:text-primary-light transition-colors uppercase tracking-wider cursor-pointer"
           >
             {selectedDocIds.length === documents.length ? 'Clear Selection' : 'Select All'}
           </button>
@@ -137,8 +137,8 @@ export default function DocumentList({
                 onClick={() => !isEditing && onToggleSelectDoc(doc.id)}
                 className={`group border rounded-xl p-3.5 cursor-pointer transition-all duration-200 relative ${
                   isSelected
-                    ? 'border-terracotta bg-terracotta/5 shadow-xs scale-[1.01]'
-                    : 'border-sand-muted/50 hover:border-terracotta/40 hover:bg-white/40 dark:border-sand-dark dark:hover:border-terracotta/30 dark:hover:bg-sand-dark/30'
+                    ? 'border-primary bg-primary/5 shadow-xs scale-[1.01]'
+                    : 'border-sand-muted/50 hover:border-primary/40 hover:bg-white/40 dark:border-sand-dark dark:hover:border-primary/30 dark:hover:bg-[#121520]/30'
                 }`}
               >
                 {/* File Type Tag */}
@@ -154,18 +154,18 @@ export default function DocumentList({
                         type="text"
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
-                        className="flex-1 text-xs bg-white dark:bg-paper-dark border border-terracotta rounded-lg px-2.5 py-1 outline-none font-sans font-semibold text-ink-light dark:text-ink-dark"
+                        className="flex-1 text-xs bg-white dark:bg-paper-dark border border-primary rounded-lg px-2.5 py-1 outline-none font-sans font-semibold text-ink-light dark:text-ink-dark"
                         autoFocus
                       />
                       <button
                         onClick={(e) => saveRename(doc.id, e)}
-                        className="p-1.5 rounded-md hover:bg-forest/15 text-forest"
+                        className="p-1.5 rounded-md hover:bg-secondary/15 text-secondary cursor-pointer"
                       >
                         <Check size={13} />
                       </button>
                       <button
                         onClick={cancelRename}
-                        className="p-1.5 rounded-md hover:bg-terracotta/15 text-terracotta"
+                        className="p-1.5 rounded-md hover:bg-accent-rose/15 text-accent-rose cursor-pointer"
                       >
                         <X size={13} />
                       </button>
@@ -173,7 +173,7 @@ export default function DocumentList({
                   ) : (
                     <div className="flex items-start justify-between pr-12">
                       <p className={`font-serif text-xs font-bold truncate ${
-                        isSelected ? 'text-terracotta' : 'text-ink-light dark:text-ink-dark'
+                        isSelected ? 'text-primary' : 'text-ink-light dark:text-ink-dark'
                       }`}>
                         {displayName}
                       </p>
@@ -191,7 +191,7 @@ export default function DocumentList({
                       <Calendar size={9} />
                       {formatDate(doc.uploadDate)}
                     </span>
-
+ 
                     {(doc.totalPages || doc.totalSlides) && (
                       <span className="font-mono bg-sand/30 dark:bg-sand-dark/45 px-1 py-0.5 rounded border border-sand-muted/20 dark:border-sand-dark/30">
                         {doc.type === 'pdf' ? `${doc.totalPages}p` : `${doc.totalSlides}s`}
@@ -205,14 +205,14 @@ export default function DocumentList({
                   <div className="absolute right-3.5 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity flex items-center space-x-1.5">
                     <button
                       onClick={(e) => startRename(doc, e)}
-                      className="p-1.5 rounded-md hover:bg-sand/65 dark:hover:bg-sand-dark/80 text-ink-light/60 hover:text-ink-light dark:text-ink-dark/60 dark:hover:text-ink-dark transition-colors"
+                      className="p-1.5 rounded-md hover:bg-sand/65 dark:hover:bg-sand-dark/80 text-ink-light/60 hover:text-ink-light dark:text-ink-dark/60 dark:hover:text-ink-dark transition-colors cursor-pointer"
                       title="Rename"
                     >
                       <Edit2 size={11} />
                     </button>
                     <button
                       onClick={(e) => handleDelete(doc.id, e)}
-                      className="p-1.5 rounded-md hover:bg-terracotta/15 text-terracotta/75 hover:text-terracotta transition-colors"
+                      className="p-1.5 rounded-md hover:bg-accent-rose/15 text-accent-rose/75 hover:text-accent-rose transition-colors cursor-pointer"
                       title="Delete"
                     >
                       <Trash2 size={11} />
@@ -226,17 +226,17 @@ export default function DocumentList({
       </div>
 
       {/* Privacy Shield Indicator (High-Tech, secure-scan) */}
-      <div className="border border-forest/15 dark:border-white/5 bg-forest/5 dark:bg-forest/10 rounded-2xl p-4.5 mt-auto relative overflow-hidden secure-scan group hover:border-forest/25 transition-colors duration-300">
+      <div className="border border-secondary/15 dark:border-white/5 bg-secondary/5 dark:bg-secondary/10 rounded-2xl p-4.5 mt-auto relative overflow-hidden secure-scan group hover:border-secondary/25 transition-colors duration-300">
         <div className="flex gap-3.5 items-start relative z-10">
-          <div className="p-2 rounded-xl bg-forest/10 dark:bg-forest/25 text-forest dark:text-emerald-500 shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300">
+          <div className="p-2 rounded-xl bg-secondary/10 dark:bg-secondary/25 text-secondary dark:text-secondary-light shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300">
             <Shield size={16} />
           </div>
           <div>
-            <h4 className="font-serif text-xs font-bold text-forest dark:text-ink-dark flex items-center gap-1.5">
+            <h4 className="font-serif text-xs font-bold text-secondary-dark dark:text-ink-dark flex items-center gap-1.5">
               Hardware Secure Local Sandbox
-              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="inline-flex h-2 w-2 rounded-full bg-secondary-light animate-pulse shrink-0" />
             </h4>
-            <p className="text-[10px] text-forest/75 dark:text-ink-dark/50 mt-1 leading-relaxed">
+            <p className="text-[10px] text-secondary-dark/75 dark:text-ink-dark/50 mt-1 leading-relaxed">
               DocMind runs 100% locally. Text processing, embeddings, and vector similarity calculations occur entirely within this browser context. No cloud trackers, zero leakages.
             </p>
           </div>

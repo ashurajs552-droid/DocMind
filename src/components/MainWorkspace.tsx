@@ -7,7 +7,7 @@ import ChatPane, { type ChatMessage } from '@/components/chat/ChatPane';
 import VoiceOrb from '@/components/voice/VoiceOrb';
 import CitationExplorer from '@/components/chat/CitationExplorer';
 import { type ChunkRecord } from '@/lib/db';
-import { Sun, Moon, Sparkles, ShieldCheck } from 'lucide-react';
+import { Sun, Moon, Sparkles, Menu, X } from 'lucide-react';
 
 export default function MainWorkspace() {
   const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
@@ -18,6 +18,7 @@ export default function MainWorkspace() {
   const [activeChunk, setActiveChunk] = useState<(ChunkRecord & { documentName: string }) | null>(null);
   const [voiceTranscript, setVoiceTranscript] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Load theme from localStorage on start
   useEffect(() => {
@@ -64,32 +65,43 @@ export default function MainWorkspace() {
     <div className="flex flex-col h-screen overflow-hidden transition-colors duration-300 relative tech-grid">
       {/* Dynamic Animated Ambient Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] rounded-full bg-forest/15 dark:bg-forest/10 blur-[110px] animate-float-slow-a" />
-        <div className="absolute -bottom-32 -right-32 w-[35rem] h-[35rem] rounded-full bg-terracotta/10 dark:bg-terracotta/5 blur-[120px] animate-float-slow-b" />
+        <div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] rounded-full bg-secondary/15 dark:bg-secondary/10 blur-[110px] animate-float-slow-a" />
+        <div className="absolute -bottom-32 -right-32 w-[35rem] h-[35rem] rounded-full bg-primary/10 dark:bg-primary/5 blur-[120px] animate-float-slow-b" />
       </div>
 
       {/* Brand Header / Top Bar (Glassmorphic) */}
-      <header className="relative z-10 border-b border-sand-muted/40 dark:border-sand-dark/60 bg-white/70 dark:bg-paper-dark/70 backdrop-blur-md px-6 py-4 flex items-center justify-between shrink-0">
+      <header className="relative z-30 border-b border-sand-muted/40 dark:border-sand-dark/60 bg-white/70 dark:bg-[#080b11]/85 backdrop-blur-md px-4 sm:px-6 py-3.5 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-forest text-white dark:bg-terracotta shadow-md shadow-terracotta/10">
-            <Sparkles size={17} />
-          </div>
-          <div>
-            <h1 className="font-serif text-xl font-extrabold tracking-tight text-ink-light dark:text-ink-dark flex items-center gap-2.5">
-              DocMind
-              <span className="text-[10px] tracking-widest uppercase font-mono font-bold bg-sand/60 dark:bg-sand-dark/80 text-ink-light/60 dark:text-ink-dark/50 px-2 py-0.5 rounded-md border border-sand-muted/30 dark:border-sand-dark/40">
-                Local RAG v1.0
-              </span>
-            </h1>
+          {/* Hamburger Menu on smaller screens */}
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="lg:hidden p-2 -ml-2 rounded-xl text-ink-light/70 hover:text-ink-light dark:text-ink-dark/70 dark:hover:text-ink-dark hover:bg-sand/30 dark:hover:bg-sand-dark/30 transition-colors cursor-pointer"
+            title="Open Document Library"
+          >
+            <Menu size={20} />
+          </button>
+
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-center w-8.5 h-8.5 rounded-xl bg-primary text-white shadow-md shadow-primary/20">
+              <Sparkles size={16} />
+            </div>
+            <div>
+              <h1 className="font-serif text-lg font-extrabold tracking-tight text-ink-light dark:text-ink-dark flex items-center gap-2">
+                DocMind
+                <span className="hidden sm:inline-block text-[9px] tracking-widest uppercase font-mono font-bold bg-sand/60 dark:bg-sand-dark/80 text-ink-light/60 dark:text-ink-dark/50 px-2 py-0.5 rounded-md border border-sand-muted/30 dark:border-sand-dark/40">
+                  Local RAG v1.0
+                </span>
+              </h1>
+            </div>
           </div>
         </div>
 
         {/* Global Action Header Items */}
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2 text-[10px] font-semibold text-forest dark:text-ink-dark/60 font-mono bg-forest/5 dark:bg-sand-dark/65 px-3 py-1.5 rounded-full border border-forest/15 dark:border-sand-dark/80 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 text-[10px] font-semibold text-secondary-dark dark:text-secondary-light font-mono bg-secondary/5 dark:bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/15 dark:border-secondary/20 shadow-xs">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
             </span>
             <span>Secure Sandbox Workspace</span>
           </div>
@@ -99,7 +111,7 @@ export default function MainWorkspace() {
             className="p-2 rounded-xl border border-sand-muted/50 hover:border-sand-dark dark:border-sand-dark dark:hover:border-sand-muted text-ink-light/60 hover:text-ink-light dark:text-ink-dark/60 dark:hover:text-ink-dark transition-all duration-200 cursor-pointer bg-white/50 dark:bg-sand-dark/20 backdrop-blur-xs"
             title="Toggle theme"
           >
-            {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
+            {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
           </button>
         </div>
       </header>
@@ -107,7 +119,30 @@ export default function MainWorkspace() {
       {/* Main Workspace Frame */}
       <div className="flex-1 flex overflow-hidden relative z-10">
         {/* Left column: Document Library & Upload */}
-        <aside className="w-80 md:w-96 border-r border-sand-muted/40 dark:border-sand-dark/60 bg-white/40 dark:bg-paper-dark/30 backdrop-blur-md p-6 flex flex-col space-y-6 shrink-0 overflow-y-auto">
+        {/* Sidebar Backdrop Overlay on Mobile */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        
+        <aside
+          className={`fixed inset-y-0 left-0 z-50 w-80 sm:w-96 lg:static lg:w-80 xl:w-96 border-r border-sand-muted/40 dark:border-sand-dark/60 bg-paper-light dark:bg-[#0c0e15] lg:bg-white/40 lg:dark:bg-paper-dark/30 backdrop-blur-md p-6 flex flex-col space-y-6 shrink-0 overflow-y-auto transform transition-transform duration-300 ease-in-out ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
+        >
+          {/* Mobile sidebar header close button */}
+          <div className="flex items-center justify-between lg:hidden pb-3 border-b border-sand-muted/20 dark:border-sand-dark/20">
+            <span className="font-serif text-sm font-bold text-ink-light dark:text-ink-dark">Document Library</span>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="p-1.5 rounded-lg text-ink-light/50 hover:text-ink-light dark:text-ink-dark/50 dark:hover:text-ink-dark hover:bg-sand/30 dark:hover:bg-sand-dark/30 cursor-pointer"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
           <div>
             <h2 className="font-serif text-lg font-bold text-ink-light dark:text-ink-dark">
               Upload Sources
@@ -121,10 +156,12 @@ export default function MainWorkspace() {
           <DocumentUpload />
 
           {/* Document list & toggle selector */}
-          <div className="flex-1 flex flex-col justify-end">
+          <div className="flex-1 flex flex-col justify-end min-h-0">
             <DocumentList
               selectedDocIds={selectedDocIds}
-              onToggleSelectDoc={handleToggleSelectDoc}
+              onToggleSelectDoc={(id) => {
+                handleToggleSelectDoc(id);
+              }}
               onSelectAll={handleSelectAllDocs}
             />
           </div>
@@ -147,7 +184,7 @@ export default function MainWorkspace() {
           </div>
 
           {/* Voice Assistant Panel (docked in bottom center) */}
-          <div className="px-6 pb-6 border-t border-sand-muted/40 dark:border-sand-dark/60 pt-4 bg-white/45 dark:bg-paper-dark/45 backdrop-blur-md">
+          <div className="px-4 pb-4 pt-2.5 sm:px-6 sm:pb-6 sm:pt-4 border-t border-sand-muted/40 dark:border-sand-dark/60 bg-white/45 dark:bg-paper-dark/45 backdrop-blur-md">
             <VoiceOrb
               onTranscript={handleTranscript}
               isThinking={isThinking}
@@ -159,7 +196,19 @@ export default function MainWorkspace() {
         </main>
 
         {/* Right column: Source preview / citation lookup */}
-        <aside className="w-80 md:w-96 shrink-0 h-full hidden lg:block bg-white/45 dark:bg-paper-dark/45 backdrop-blur-md">
+        {/* Backdrop for Citation Explorer Drawer on Mobile */}
+        {activeChunk && (
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden"
+            onClick={() => setActiveChunk(null)}
+          />
+        )}
+        
+        <aside
+          className={`fixed inset-y-0 right-0 z-50 w-85 max-w-[90vw] sm:w-96 lg:static lg:w-80 xl:w-96 shrink-0 h-full bg-paper-light dark:bg-[#0c0e15] lg:bg-white/45 lg:dark:bg-paper-dark/45 backdrop-blur-md transform transition-transform duration-300 ease-in-out border-l border-sand-muted/40 dark:border-sand-dark/60 ${
+            activeChunk ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
+          } ${activeChunk ? 'block' : 'hidden lg:block'}`}
+        >
           <CitationExplorer
             activeChunk={activeChunk}
             onClose={() => setActiveChunk(null)}

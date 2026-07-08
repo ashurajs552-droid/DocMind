@@ -262,8 +262,8 @@ export default function VoiceOrb({
           onClick={handleToggleVoiceMode}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-[10px] font-extrabold font-mono tracking-widest transition-all duration-200 border cursor-pointer ${
             voiceModeEnabled
-              ? 'bg-terracotta text-white border-terracotta hover:bg-terracotta-dark shadow-sm shadow-terracotta/25'
-              : 'border-sand-muted/50 hover:border-terracotta/40 text-ink-light/50 hover:text-ink-light dark:text-ink-dark/50 dark:hover:text-ink-dark bg-white/30 dark:bg-sand-dark/20'
+              ? 'bg-primary text-white border-primary hover:bg-primary-dark shadow-sm shadow-primary/25'
+              : 'border-sand-muted/50 hover:border-primary/40 text-ink-light/50 hover:text-ink-light dark:text-ink-dark/50 dark:hover:text-ink-dark bg-white/30 dark:bg-sand-dark/20'
           }`}
         >
           {voiceModeEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
@@ -276,8 +276,8 @@ export default function VoiceOrb({
             onClick={() => setShowSettings(!showSettings)}
             className={`p-2 rounded-xl border transition-all duration-200 cursor-pointer ${
               showSettings
-                ? 'border-terracotta text-terracotta bg-terracotta/5'
-                : 'border-sand-muted/50 hover:border-terracotta/40 text-ink-light/40 hover:text-ink-light dark:text-ink-dark/40 dark:hover:text-ink-dark bg-white/30 dark:bg-sand-dark/20'
+                ? 'border-primary text-primary bg-primary/5'
+                : 'border-sand-muted/50 hover:border-primary/40 text-ink-light/40 hover:text-ink-light dark:text-ink-dark/40 dark:hover:text-ink-dark bg-white/30 dark:bg-sand-dark/20'
             }`}
             title="Console Settings"
           >
@@ -291,13 +291,13 @@ export default function VoiceOrb({
         <div className="w-full border-t border-dashed border-sand-muted/40 dark:border-sand-dark/60 pt-3.5 mt-1.5 space-y-3.5 text-xs animate-fade-in">
           <div className="flex items-center justify-between">
             <span className="font-semibold text-ink-light/75 dark:text-ink-dark/75 flex items-center gap-2 font-mono text-[10px] tracking-wide">
-              <Sparkles size={11} className="text-terracotta" />
+              <Sparkles size={11} className="text-primary" />
               HIGH ACCURACY fallback (Whisper API)
             </span>
             <button
               onClick={() => setUseWhisper(!useWhisper)}
               className={`w-9 h-5 rounded-full p-0.5 transition-colors duration-200 cursor-pointer ${
-                useWhisper ? 'bg-forest' : 'bg-sand-muted/80 dark:bg-sand-dark'
+                useWhisper ? 'bg-secondary' : 'bg-sand-muted/80 dark:bg-sand-dark'
               }`}
             >
               <div
@@ -337,7 +337,7 @@ export default function VoiceOrb({
                 step="0.1"
                 value={speechRate}
                 onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
-                className="w-full accent-terracotta cursor-pointer"
+                className="w-full accent-primary cursor-pointer"
               />
             </div>
             <div className="space-y-1">
@@ -352,7 +352,7 @@ export default function VoiceOrb({
                 step="0.1"
                 value={speechPitch}
                 onChange={(e) => setSpeechPitch(parseFloat(e.target.value))}
-                className="w-full accent-terracotta cursor-pointer"
+                className="w-full accent-primary cursor-pointer"
               />
             </div>
           </div>
@@ -367,9 +367,9 @@ export default function VoiceOrb({
             <div
               className={`absolute inset-0 rounded-full transition-all duration-700 blur-xl opacity-50 ${
                 isListening
-                  ? 'bg-terracotta animate-orb-pulse scale-110'
+                  ? 'bg-primary animate-orb-pulse scale-110'
                   : isSpeaking
-                  ? 'bg-forest animate-orb-pulse scale-105'
+                  ? 'bg-secondary animate-orb-pulse scale-105'
                   : isThinking
                   ? 'bg-amber-500 animate-pulse scale-100'
                   : 'bg-sand/20 dark:bg-sand-dark/20 scale-90'
@@ -380,9 +380,9 @@ export default function VoiceOrb({
             <div
               className={`absolute inset-1 rounded-full border border-dashed transition-all duration-500 pointer-events-none ${
                 isListening
-                  ? 'border-terracotta/40 scale-105 animate-orbit-slow'
+                  ? 'border-primary/40 scale-105 animate-orbit-slow'
                   : isSpeaking
-                  ? 'border-forest/40 scale-105 animate-orbit-slow'
+                  ? 'border-secondary/40 scale-105 animate-orbit-slow'
                   : 'border-sand-muted/30 dark:border-white/10 animate-orbit-slow'
               }`}
             />
@@ -392,12 +392,12 @@ export default function VoiceOrb({
               onClick={isListening ? stopListening : startListening}
               className={`relative z-10 w-20 h-20 rounded-full flex flex-col items-center justify-center transition-all duration-500 shadow-lg cursor-pointer ${
                 isListening
-                  ? 'bg-terracotta text-white border-2 border-white/30 scale-95 hover:scale-100 shadow-terracotta/30'
+                  ? 'bg-primary text-white border-2 border-white/30 scale-95 hover:scale-100 shadow-primary/30'
                   : isSpeaking
-                  ? 'bg-forest text-white border-2 border-white/20 shadow-forest/30 hover:scale-105'
+                  ? 'bg-secondary text-white border-2 border-white/20 shadow-secondary/30 hover:scale-105'
                   : isThinking
                   ? 'bg-amber-600 text-white animate-pulse'
-                  : 'bg-white dark:bg-sand-dark border border-sand-muted/50 dark:border-white/10 text-terracotta hover:border-terracotta hover:scale-105 hover:shadow-terracotta/15'
+                  : 'bg-white dark:bg-sand-dark border border-sand-muted/50 dark:border-white/10 text-primary hover:border-primary hover:scale-105 hover:shadow-primary/15'
               }`}
             >
               {isListening ? (
@@ -424,7 +424,7 @@ export default function VoiceOrb({
             {isSpeaking && (
               <button
                 onClick={stopSpeaking}
-                className="text-[9px] text-terracotta hover:underline mt-1 font-mono uppercase font-bold tracking-widest cursor-pointer"
+                className="text-[9px] text-primary hover:underline mt-1 font-mono uppercase font-bold tracking-widest cursor-pointer"
               >
                 Interrupt Audio Playback
               </button>
@@ -439,7 +439,7 @@ export default function VoiceOrb({
                 return (
                   <div
                     key={bar}
-                    className="w-0.5 bg-forest dark:bg-emerald-500 rounded-full h-full transform origin-center animate-waveform"
+                    className="w-0.5 bg-secondary dark:bg-secondary rounded-full h-full transform origin-center animate-waveform"
                     style={{ animationDelay }}
                   />
                 );
@@ -449,7 +449,7 @@ export default function VoiceOrb({
 
           {/* Listening Pulsing visual lines */}
           {isListening && (
-            <div className="flex items-center justify-center gap-1.5 mt-3 text-[9px] font-mono font-bold uppercase tracking-wider text-terracotta">
+            <div className="flex items-center justify-center gap-1.5 mt-3 text-[9px] font-mono font-bold uppercase tracking-wider text-primary">
               <span className="w-1.5 h-1.5 rounded-full bg-current animate-ping" />
               <span>Mic Active ({useWhisper ? 'Whisper' : 'SpeechAPI'})</span>
             </div>

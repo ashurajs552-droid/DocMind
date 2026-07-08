@@ -222,7 +222,7 @@ export default function ChatPane({
           const matchedChunk = retrievedChunks?.find((c) => {
             if (pageNum !== undefined) return c.pageNumber === pageNum;
             if (slideNum !== undefined) return c.slideNumber === slideNum;
-            return c.pageNumber === undefined && c.slideNumber === undefined; // fallback default
+            return c.pageNumber === undefined && c.slideNumber === undefined;
           });
 
           return (
@@ -232,7 +232,7 @@ export default function ChatPane({
               disabled={!matchedChunk}
               className={`inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 rounded text-xs font-semibold font-sans transition-all-custom border cursor-pointer ${
                 matchedChunk
-                  ? 'bg-terracotta/10 text-terracotta border-terracotta/25 hover:bg-terracotta/20 hover:border-terracotta/35 dark:bg-terracotta/20 dark:text-terracotta-light'
+                  ? 'bg-primary/10 text-primary border-primary/25 hover:bg-primary/20 hover:border-primary/35 dark:bg-primary/20 dark:text-primary-light'
                   : 'bg-sand/30 text-ink-light/40 border-sand-muted/50 dark:bg-sand-dark dark:text-ink-dark/40 cursor-default'
               }`}
               title={matchedChunk ? `Context from ${matchedChunk.documentName}` : 'Citation details unavailable'}
@@ -260,9 +260,9 @@ export default function ChatPane({
   return (
     <div className="flex flex-col h-full bg-transparent">
       {/* Active Context Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-sand-muted/40 dark:border-sand-dark/60 bg-white/40 dark:bg-sand-dark/10 backdrop-blur-xs relative z-10">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-sand-muted/40 dark:border-sand-dark/60 bg-white/40 dark:bg-sand-dark/10 backdrop-blur-xs relative z-10">
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-xl bg-terracotta/10 text-terracotta border border-terracotta/15">
+          <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/15">
             <BookOpen size={14} />
           </div>
           <div>
@@ -278,7 +278,7 @@ export default function ChatPane({
         {messages.length > 0 && (
           <button
             onClick={clearChat}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-extrabold text-terracotta hover:bg-terracotta/10 rounded-xl transition-all-custom border border-transparent hover:border-terracotta/25 uppercase font-mono tracking-wider cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-extrabold text-primary hover:bg-primary/10 rounded-xl transition-all-custom border border-transparent hover:border-primary/25 uppercase font-mono tracking-wider cursor-pointer"
           >
             <RefreshCw size={11} />
             Reset Console
@@ -287,11 +287,11 @@ export default function ChatPane({
       </div>
 
       {/* Message Feed */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6 relative z-10">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto space-y-5 animate-fade-in">
-            <div className="w-14 h-14 rounded-2xl bg-white dark:bg-sand-dark flex items-center justify-center text-terracotta shadow-md border border-sand-muted/30 dark:border-white/5 relative group">
-              <div className="absolute inset-0 rounded-2xl bg-terracotta/5 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="w-14 h-14 rounded-2xl bg-white dark:bg-sand-dark flex items-center justify-center text-primary shadow-md border border-sand-muted/30 dark:border-white/5 relative group">
+              <div className="absolute inset-0 rounded-2xl bg-primary/5 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <Cpu size={24} className="relative z-10" />
             </div>
             <div>
@@ -320,10 +320,10 @@ export default function ChatPane({
                 className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-4.5 py-3.5 shadow-xs text-sm leading-relaxed border transition-all-custom ${
+                  className={`max-w-[88%] sm:max-w-[80%] rounded-2xl px-4 py-3 sm:px-4.5 sm:py-3.5 shadow-xs text-sm leading-relaxed border transition-all-custom ${
                     isUser
-                      ? 'bg-forest text-white border-forest dark:bg-sand-dark dark:border-sand-dark dark:text-ink-dark shadow-sm'
-                      : 'bg-white/70 dark:bg-sand-dark/40 border-sand-muted/50 dark:border-white/5 text-ink-light dark:text-ink-dark shadow-xs backdrop-blur-xs'
+                      ? 'bg-primary text-white border-primary dark:bg-primary-dark dark:border-primary-dark dark:text-ink-dark shadow-sm'
+                      : 'bg-white/70 dark:bg-[#0f121d]/40 border-sand-muted/50 dark:border-white/5 text-ink-light dark:text-ink-dark shadow-xs backdrop-blur-xs'
                   }`}
                 >
                   <p className="text-[8px] uppercase font-bold tracking-widest opacity-40 font-mono mb-1.5">
@@ -341,12 +341,12 @@ export default function ChatPane({
           <div className="flex justify-start animate-fade-in">
             <div className="bg-white/60 dark:bg-sand-dark/30 border border-sand-muted/40 dark:border-white/5 rounded-2xl px-4.5 py-3.5 text-sm flex items-center space-x-3 shadow-xs">
               <div className="flex space-x-1.5">
-                <div className="w-2 h-2 rounded-full bg-terracotta animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 rounded-full bg-terracotta animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2 h-2 rounded-full bg-terracotta animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
               <span className="text-[10px] text-ink-light/50 dark:text-ink-dark/50 font-mono flex items-center gap-1.5">
-                <Terminal size={11} className="text-terracotta" />
+                <Terminal size={11} className="text-primary" />
                 Retrieving local context...
               </span>
             </div>
@@ -356,8 +356,8 @@ export default function ChatPane({
       </div>
 
       {/* Message Input panel (Glassmorphic) */}
-      <div className="p-4 border-t border-sand-muted/40 dark:border-sand-dark/60 bg-white/40 dark:bg-paper-dark/30 backdrop-blur-md relative z-10">
-        <div className="relative flex items-end border border-sand-muted/50 focus-within:border-terracotta/70 dark:border-sand-dark dark:focus-within:border-terracotta/50 rounded-2xl p-2.5 bg-white/50 dark:bg-sand-dark/20 transition-all duration-200 shadow-sm">
+      <div className="p-3 sm:p-4 border-t border-sand-muted/40 dark:border-sand-dark/60 bg-white/40 dark:bg-paper-dark/30 backdrop-blur-md relative z-10">
+        <div className="relative flex items-end border border-sand-muted/50 focus-within:border-primary/70 dark:border-sand-dark dark:focus-within:border-primary/50 rounded-2xl p-2 sm:p-2.5 bg-white/50 dark:bg-[#0f121d]/30 transition-all duration-200 shadow-sm">
           <textarea
             ref={inputRef}
             rows={1}
@@ -376,7 +376,7 @@ export default function ChatPane({
           <button
             onClick={() => submitQuery(input)}
             disabled={!input.trim() || isThinking || input === 'Transcribing audio...'}
-            className="p-2.5 bg-terracotta hover:bg-terracotta-dark text-white rounded-xl transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:hover:bg-terracotta shadow-md shadow-terracotta/15 disabled:shadow-none"
+            className="p-2.5 bg-primary hover:bg-primary-dark text-white rounded-xl transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:hover:bg-primary shadow-md shadow-primary/15 disabled:shadow-none"
           >
             <Send size={14} />
           </button>

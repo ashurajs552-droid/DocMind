@@ -191,7 +191,7 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
       case 'ready':
         return 'text-emerald-600 border-emerald-500/20 bg-emerald-500/5 dark:text-emerald-400';
       case 'error':
-        return 'text-terracotta border-terracotta/25 bg-terracotta/5';
+        return 'text-accent-rose border-accent-rose/25 bg-accent-rose/5';
       default:
         return 'text-ink-light/80 border-sand-muted bg-white/20 dark:bg-sand-dark/10 dark:border-white/5';
     }
@@ -215,8 +215,8 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
         onClick={triggerFileInput}
         className={`relative border border-dashed rounded-2xl p-6.5 text-center cursor-pointer transition-all duration-300 group glass-panel ${
           isDragging
-            ? 'border-terracotta bg-terracotta/5 scale-[0.99] shadow-inner'
-            : 'border-sand-muted/50 hover:border-terracotta hover:scale-[1.01] hover:shadow-md hover:shadow-terracotta/5'
+            ? 'border-primary bg-primary/5 scale-[0.99] shadow-inner'
+            : 'border-sand-muted/50 hover:border-primary hover:scale-[1.01] hover:shadow-md hover:shadow-primary/5'
         }`}
       >
         <input
@@ -229,7 +229,7 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
         />
         
         <div className="flex flex-col items-center justify-center space-y-3 relative z-10">
-          <div className="p-3.5 rounded-xl bg-sand/50 dark:bg-sand-dark/65 text-terracotta group-hover:scale-105 transition-transform duration-300 shadow-sm border border-sand-muted/20 dark:border-white/5">
+          <div className="p-3.5 rounded-xl bg-sand/50 dark:bg-sand-dark/65 text-primary group-hover:scale-105 transition-transform duration-300 shadow-sm border border-sand-muted/20 dark:border-white/5">
             <Upload size={20} />
           </div>
           <div>
@@ -237,7 +237,7 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
               Import Source Files
             </h3>
             <p className="text-[10px] text-ink-light/50 dark:text-ink-dark/50 mt-1 max-w-[15rem] mx-auto leading-relaxed">
-              Drag & drop files or click to browse. Supports <span className="font-bold text-terracotta">PDF, DOCX,</span> and <span className="font-bold text-terracotta">PPTX</span>.
+              Drag & drop files or click to browse. Supports <span className="font-bold text-primary">PDF, DOCX,</span> and <span className="font-bold text-primary">PPTX</span>.
             </p>
           </div>
         </div>
@@ -259,7 +259,7 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
                   item.stage
                 )}`}
               >
-                <div className="mt-0.5 text-terracotta shrink-0">
+                <div className="mt-0.5 text-primary shrink-0">
                   <FileText size={15} />
                 </div>
                 
@@ -274,7 +274,7 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
                   </div>
 
                   <div className="mt-1 flex items-center justify-between text-[10px]">
-                    <span className="truncate text-ink-light/65 dark:text-ink-dark/65 font-mono uppercase tracking-wide">
+                    <span className="truncate text-ink-light/65 dark:text-ink-dark/65 font-mono uppercase tracking-wide font-medium">
                       {item.detail}
                     </span>
                     <span className="font-bold font-mono shrink-0 ml-1">
@@ -286,14 +286,14 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
                   {item.stage !== 'ready' && item.stage !== 'error' && (
                     <div className="w-full bg-sand-muted/20 dark:bg-white/5 h-1.5 rounded-full overflow-hidden mt-1.5">
                       <div
-                        className="bg-terracotta h-full rounded-full transition-all duration-300 ease-out"
+                        className="bg-primary h-full rounded-full transition-all duration-300 ease-out"
                         style={{ width: `${item.progress}%` }}
                       />
                     </div>
                   )}
 
                   {item.stage === 'error' && item.error && (
-                    <p className="text-[10px] text-terracotta font-bold mt-1 font-mono uppercase">
+                    <p className="text-[10px] text-accent-rose font-bold mt-1 font-mono uppercase">
                       ERR: {item.error}
                     </p>
                   )}
@@ -304,10 +304,10 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
                     <CheckCircle2 size={16} className="text-emerald-500 dark:text-emerald-400 animate-fade-in" />
                   )}
                   {item.stage === 'error' && (
-                    <AlertCircle size={16} className="text-terracotta animate-pulse" />
+                    <AlertCircle size={16} className="text-accent-rose animate-pulse" />
                   )}
                   {item.stage !== 'ready' && item.stage !== 'error' && (
-                    <Loader2 size={14} className="animate-spin text-terracotta/80" />
+                    <Loader2 size={14} className="animate-spin text-primary/80" />
                   )}
                 </div>
               </div>

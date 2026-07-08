@@ -1,23 +1,44 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper-light: #faf8f5;
-  --color-paper-dark: #0b0a09;
-  --color-ink-light: #181715;
-  --color-ink-dark: #eae6df;
+  --color-paper-light: #f8fafc; /* Slate-50 */
+  --color-paper-dark: #080b11;  /* Deep tech navy-black */
+  --color-ink-light: #0f172a;   /* Slate-900 */
+  --color-ink-dark: #f1f5f9;    /* Slate-100 */
   
-  --color-forest: #143022;
-  --color-forest-light: #1f4834;
-  --color-forest-dark: #091710;
+  --color-primary: #6366f1;         /* Indigo primary */
+  --color-primary-light: #818cf8;
+  --color-primary-dark: #4f46e5;
   
-  --color-terracotta: #b84e2a;
-  --color-terracotta-light: #d1643f;
-  --color-terracotta-dark: #913a1b;
+  --color-secondary: #0d9488;       /* Teal secondary */
+  --color-secondary-light: #14b8a6;
+  --color-secondary-dark: #0f766e;
   
-  --color-sand: #e4ddcf;
-  --color-sand-light: #f2ede4;
-  --color-sand-dark: #1b1917;
-  --color-sand-muted: #d0c5b4;
+  --color-accent-violet: #8b5cf6;   /* Violet */
+  --color-accent-violet-light: #a78bfa;
+  --color-accent-violet-dark: #7c3aed;
+  
+  --color-accent-rose: #f43f5e;     /* Rose */
+  --color-accent-rose-light: #fb7185;
+  --color-accent-rose-dark: #e11d48;
+
+  --color-accent-cyan: #06b6d4;     /* Cyan */
+  --color-accent-cyan-light: #22d3ee;
+  --color-accent-cyan-dark: #0891b2;
+
+  /* Mappings for backwards compatibility with existing tailwind classes if any */
+  --color-terracotta: #6366f1;
+  --color-terracotta-light: #818cf8;
+  --color-terracotta-dark: #4f46e5;
+
+  --color-forest: #0d9488;
+  --color-forest-light: #14b8a6;
+  --color-forest-dark: #0f766e;
+  
+  --color-sand: #cbd5e1;
+  --color-sand-light: #e2e8f0;
+  --color-sand-dark: #1e293b;
+  --color-sand-muted: #94a3b8;
 
   --font-serif: var(--font-newsreader), Georgia, serif;
   --font-sans: var(--font-jakarta), system-ui, sans-serif;
@@ -90,20 +111,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(184, 78, 42, 0.15);
+  background: rgba(99, 102, 241, 0.15);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(184, 78, 42, 0.35);
+  background: rgba(99, 102, 241, 0.35);
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(234, 230, 223, 0.08);
+  background: rgba(241, 245, 249, 0.08);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(234, 230, 223, 0.2);
+  background: rgba(241, 245, 249, 0.2);
 }
 
 /* Base resets & styles */
@@ -124,24 +145,24 @@ body {
   background-color: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(228, 221, 207, 0.5);
+  border: 1px solid rgba(203, 213, 225, 0.5);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
 }
 
 .dark .glass-panel {
-  background-color: rgba(27, 25, 23, 0.45);
-  border: 1px solid rgba(234, 230, 223, 0.05);
+  background-color: rgba(30, 41, 59, 0.45);
+  border: 1px solid rgba(241, 245, 249, 0.05);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* Technical Dotted Grid Pattern */
 .tech-grid {
   background-size: 20px 20px;
-  background-image: radial-gradient(circle, rgba(184, 78, 42, 0.04) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
 }
 
 .dark .tech-grid {
-  background-image: radial-gradient(circle, rgba(234, 230, 223, 0.02) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(241, 245, 249, 0.02) 1px, transparent 1px);
 }
 
 /* Secure Scan-line Animation */
@@ -167,23 +188,23 @@ body {
   position: absolute;
   width: 100%;
   height: 1.5px;
-  background: linear-gradient(to right, transparent, rgba(31, 72, 52, 0.5), transparent);
+  background: linear-gradient(to right, transparent, rgba(13, 148, 136, 0.5), transparent);
   left: 0;
   animation: scanline 4s linear infinite;
   pointer-events: none;
 }
 
 .dark .secure-scan::after {
-  background: linear-gradient(to right, transparent, rgba(209, 100, 63, 0.35), transparent);
+  background: linear-gradient(to right, transparent, rgba(99, 102, 241, 0.35), transparent);
 }
 
 /* Glow effects */
-.glow-forest {
-  box-shadow: 0 0 40px rgba(31, 72, 52, 0.1);
+.glow-primary {
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
 }
 
-.glow-terracotta {
-  box-shadow: 0 0 40px rgba(209, 100, 63, 0.08);
+.glow-secondary {
+  box-shadow: 0 0 40px rgba(13, 148, 136, 0.08);
 }
 
 .transition-all-custom {
@@ -191,6 +212,6 @@ body {
 }
 
 ::selection {
-  background-color: rgba(209, 100, 63, 0.18);
+  background-color: rgba(99, 102, 241, 0.18);
   color: inherit;
 }
