@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import DocumentUpload from '@/components/upload/DocumentUpload';
 import DocumentList from '@/components/upload/DocumentList';
 import ChatPane, { type ChatMessage } from '@/components/chat/ChatPane';
 import VoiceOrb from '@/components/voice/VoiceOrb';
 import CitationExplorer from '@/components/chat/CitationExplorer';
+import OnboardingModal from '@/components/OnboardingModal';
 import { type ChunkRecord } from '@/lib/db';
 import { Sun, Moon, Sparkles, Menu, X } from 'lucide-react';
 
@@ -19,6 +21,36 @@ export default function MainWorkspace() {
   const [voiceTranscript, setVoiceTranscript] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string; role: string } | null>(null);
+  const [forceOnboarding, setForceOnboarding] = useState(false);
+
+  const handleOnboardingComplete = (name: string, role: string) => {
+    setUser({ name, role });
+    setForceOnboarding(false);
+  };
+
+  const getCleanGreeting = () => {
+    if (!user) return null;
+    const hour = new Date().getHours();
+    let emoji = '☀️';
+    let greeting = 'GOOD AFTERNOON';
+    
+    if (hour >= 5 && hour < 12) {
+      emoji = '🌅';
+      greeting = 'GOOD MORNING';
+    } else if (hour >= 12 && hour < 17) {
+      emoji = '☀️';
+      greeting = 'GOOD AFTERNOON';
+    } else if (hour >= 17 && hour < 22) {
+      emoji = '🌆';
+      greeting = 'GOOD EVENING';
+    } else {
+      emoji = '🌌';
+      greeting = 'GOOD NIGHT';
+    }
+    
+    return `${emoji} ${greeting}, ${user.name.toUpperCase()}`;
+  };
 
   // Load theme from localStorage on start
   useEffect(() => {
@@ -63,6 +95,13 @@ export default function MainWorkspace() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden transition-colors duration-300 relative tech-grid">
+      {/* Onboarding Modal */}
+      <OnboardingModal
+        onComplete={handleOnboardingComplete}
+        forceOpen={forceOnboarding}
+        onClose={() => setForceOnboarding(false)}
+      />
+
       {/* Dynamic Animated Ambient Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] rounded-full bg-secondary/15 dark:bg-secondary/10 blur-[110px] animate-float-slow-a" />
@@ -81,20 +120,32 @@ export default function MainWorkspace() {
             <Menu size={20} />
           </button>
 
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-8.5 h-8.5 rounded-xl bg-primary text-white shadow-md shadow-primary/20">
-              <Sparkles size={16} />
+          <Link href="/" className="flex items-center gap-3.5 cursor-pointer group">
+            <div className="flex items-center justify-center w-10.5 h-10.5 rounded-xl bg-primary text-white shadow-md shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
+              <Sparkles size={20} />
             </div>
             <div>
-              <h1 className="font-serif text-lg font-extrabold tracking-tight text-ink-light dark:text-ink-dark flex items-center gap-2">
+              <h1 className="font-serif text-xl font-extrabold tracking-tight text-ink-light dark:text-ink-dark flex items-center gap-2 group-hover:text-primary transition-colors">
                 DocMind
                 <span className="hidden sm:inline-block text-[9px] tracking-widest uppercase font-mono font-bold bg-sand/60 dark:bg-sand-dark/80 text-ink-light/60 dark:text-ink-dark/50 px-2 py-0.5 rounded-md border border-sand-muted/30 dark:border-sand-dark/40">
                   Local RAG v1.0
                 </span>
               </h1>
             </div>
-          </div>
+          </Link>
         </div>
+
+        {/* Center: Greeting */}
+        {user && (
+          <div className="flex items-center gap-2 bg-sand-light/35 dark:bg-sand-dark/25 pl-2.5 md:pl-3.5 pr-1 py-1 rounded-full border border-sand-muted/20 dark:border-white/5">
+            <span className="hidden md:inline-block text-[10px] font-bold font-mono tracking-wider text-ink-light/80 dark:text-ink-dark/80 mr-1.5">
+              {getCleanGreeting()}
+            </span>
+            <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-bold uppercase shadow-sm">
+              {user.name.charAt(0)}
+            </div>
+          </div>
+        )}
 
         {/* Global Action Header Items */}
         <div className="flex items-center gap-3">

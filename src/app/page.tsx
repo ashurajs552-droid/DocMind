@@ -2,10 +2,62 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, Shield, Cpu, BookOpen, Quote, HardDrive, Layers, ArrowRight, Mic, Volume2, Globe, ExternalLink } from 'lucide-react';
+import { Sparkles, Shield, Cpu, BookOpen, Quote, HardDrive, Layers, ArrowRight, Mic, Volume2, Globe, ExternalLink, Sun, Moon, Mail } from 'lucide-react';
+import OnboardingModal from '@/components/OnboardingModal';
 
 export default function LandingPage() {
   const [activeVoiceOrbState, setActiveVoiceOrbState] = useState<'idle' | 'breathing'>('idle');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [user, setUser] = useState<{ name: string; role: string } | null>(null);
+  const [forceOnboarding, setForceOnboarding] = useState(false);
+
+  // Load theme and user details from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'dark' : 'light');
+
+      const storedUser = localStorage.getItem('docmind_user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
+  const handleOnboardingComplete = (name: string, role: string) => {
+    setUser({ name, role });
+    setForceOnboarding(false);
+  };
+
+  const getCleanGreeting = () => {
+    if (!user) return null;
+    const hour = new Date().getHours();
+    let emoji = '☀️';
+    let greeting = 'GOOD AFTERNOON';
+    
+    if (hour >= 5 && hour < 12) {
+      emoji = '🌅';
+      greeting = 'GOOD MORNING';
+    } else if (hour >= 12 && hour < 17) {
+      emoji = '☀️';
+      greeting = 'GOOD AFTERNOON';
+    } else if (hour >= 17 && hour < 22) {
+      emoji = '🌆';
+      greeting = 'GOOD EVENING';
+    } else {
+      emoji = '🌌';
+      greeting = 'GOOD NIGHT';
+    }
+    
+    return `${emoji} ${greeting}, ${user.name.toUpperCase()}`;
+  };
 
   // Simple scroll-triggered intersection observer to handle fade/slide-ins
   useEffect(() => {
@@ -43,49 +95,73 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080b11] text-ink-dark transition-colors duration-300 relative overflow-x-hidden tech-grid">
+    <div className="min-h-screen bg-paper-light dark:bg-[#080b11] text-ink-light dark:text-ink-dark transition-colors duration-300 relative overflow-x-hidden tech-grid">
+      {/* Onboarding Dialog */}
+      <OnboardingModal onComplete={handleOnboardingComplete} forceOpen={forceOnboarding} onClose={() => setForceOnboarding(false)} />
+
       {/* Background Ambient Glow Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-40 -left-40 w-[35rem] h-[35rem] rounded-full bg-secondary/10 blur-[130px] animate-float-slow-a" />
+        <div className="absolute -top-40 -left-40 w-[35rem] h-[35rem] rounded-full bg-secondary/10 dark:bg-secondary/5 blur-[130px] animate-float-slow-a" />
         <div className="absolute top-[40%] right-[-10rem] w-[40rem] h-[40rem] rounded-full bg-primary/5 blur-[150px] animate-float-slow-b" />
         <div className="absolute top-[20%] left-[30%] w-[30rem] h-[30rem] rounded-full bg-accent-violet/5 blur-[140px] animate-float-slow-a" />
         <div className="absolute bottom-[-10rem] left-[10%] w-[35rem] h-[35rem] rounded-full bg-secondary/5 blur-[120px] animate-float-slow-a" />
       </div>
 
       {/* Nav Bar */}
-      <nav className="relative z-50 border-b border-sand-dark/80 bg-[#080b11]/80 backdrop-blur-md px-6 py-4.5 flex items-center justify-between sticky top-0">
+      <nav className="relative z-50 border-b border-sand-muted/20 dark:border-sand-dark/80 bg-paper-light/80 dark:bg-[#080b11]/80 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-white shadow-md shadow-primary/20">
-            <Sparkles size={16} />
-          </div>
-          <span className="font-serif text-lg font-extrabold tracking-tight text-ink-dark">
-            DocMind
-          </span>
+          <Link href="/" className="flex items-center gap-3.5 cursor-pointer group">
+            <div className="flex items-center justify-center w-10.5 h-10.5 rounded-xl bg-primary text-white shadow-md shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
+              <Sparkles size={20} />
+            </div>
+            <span className="font-serif text-xl font-extrabold tracking-tight text-ink-light dark:text-ink-dark group-hover:text-primary transition-colors">
+              DocMind
+            </span>
+          </Link>
         </div>
 
         {/* Center Links */}
-        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-wider text-ink-dark/60">
+        <div className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-wider text-ink-light/60 dark:text-ink-dark/60">
           <button onClick={() => scrollToSection('features')} className="hover:text-primary transition-colors cursor-pointer">
             Features
           </button>
           <button onClick={() => scrollToSection('how-it-works')} className="hover:text-primary transition-colors cursor-pointer">
             How it works
           </button>
-          <button onClick={() => scrollToSection('privacy')} className="hover:text-primary transition-colors cursor-pointer">
+          <Link href="/privacy" className="hover:text-primary transition-colors cursor-pointer">
             Privacy
-          </button>
-          <button onClick={() => scrollToSection('about')} className="hover:text-primary transition-colors cursor-pointer">
+          </Link>
+          <Link href="/about" className="hover:text-primary transition-colors cursor-pointer">
             About
-          </button>
+          </Link>
         </div>
 
         {/* Right CTA */}
-        <div>
+        <div className="flex items-center gap-3.5">
+          {user && (
+            <div className="flex items-center gap-2 bg-sand-light/35 dark:bg-sand-dark/25 pl-2.5 md:pl-3.5 pr-1 py-1 rounded-full border border-sand-muted/20 dark:border-white/5">
+              <span className="hidden md:inline-block text-[10px] font-bold font-mono tracking-wider text-ink-light/80 dark:text-ink-dark/80 mr-1.5">
+                {getCleanGreeting()}
+              </span>
+              <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-bold uppercase shadow-sm">
+                {user.name.charAt(0)}
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={toggleTheme}
+            className="p-2.5 rounded-xl border border-sand-muted/40 dark:border-sand-dark text-ink-light/60 hover:text-ink-light dark:text-ink-dark/60 dark:hover:text-ink-dark transition-all duration-200 cursor-pointer bg-white/50 dark:bg-sand-dark/20 backdrop-blur-xs"
+            title="Toggle theme"
+          >
+            {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+          </button>
+
           <Link
             href="/app"
-            className="flex items-center gap-1.5 px-4.5 py-2.5 bg-primary text-white hover:bg-primary-dark rounded-xl text-xs font-bold font-mono tracking-wider transition-all duration-300 uppercase shadow-md shadow-primary/15 hover:shadow-primary/25 hover:scale-[1.02]"
+            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary text-white hover:bg-primary-dark rounded-xl text-xs font-bold font-mono tracking-wider transition-all duration-300 uppercase shadow-md shadow-primary/15 hover:shadow-primary/25 hover:scale-[1.02]"
           >
-            Open App
+            Get Started
             <ArrowRight size={13} />
           </Link>
         </div>
@@ -106,14 +182,14 @@ export default function LandingPage() {
             </span>
           </div>
 
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-ink-dark leading-[1.08]">
+          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-ink-light dark:text-ink-dark leading-[1.08]">
             Ask your documents anything. <br />
             <span className="bg-gradient-to-r from-primary via-accent-violet to-accent-cyan bg-clip-text text-transparent underline decoration-accent-violet/30 underline-offset-8">
               Nothing leaves your device.
             </span>
           </h2>
 
-          <p className="text-base sm:text-lg text-ink-dark/75 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-ink-light/75 dark:text-ink-dark/75 max-w-2xl leading-relaxed font-sans">
             Upload PDFs, Word docs, or slide decks. DocMind reads them locally, answers your questions with exact citations, and can even talk back — no cloud storage, no data upload, ever.
           </p>
 
@@ -122,11 +198,11 @@ export default function LandingPage() {
               href="/app"
               className="px-6 py-3.5 bg-primary text-white hover:bg-primary-dark rounded-xl text-xs font-bold font-mono tracking-wider transition-all duration-300 uppercase shadow-lg shadow-primary/20 hover:scale-105"
             >
-              Open App Workspace
+              Get Started
             </Link>
             <button
               onClick={() => scrollToSection('how-it-works')}
-              className="text-xs font-bold font-mono tracking-widest uppercase text-ink-dark/60 hover:text-primary transition-colors flex items-center gap-1.5 cursor-pointer py-2 group"
+              className="text-xs font-bold font-mono tracking-widest uppercase text-ink-light/60 dark:text-ink-dark/60 hover:text-primary transition-colors flex items-center gap-1.5 cursor-pointer py-2 group"
             >
               See how it works
               <ArrowRight size={13} className="transform group-hover:translate-x-1 transition-transform" />
@@ -136,7 +212,7 @@ export default function LandingPage() {
 
         {/* Right Hero Visual (Animated Voice Orb representation) */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
-          <div className="relative w-72 h-72 sm:w-85 sm:h-85 rounded-3xl border border-sand-dark/60 bg-sand-dark/10 backdrop-blur-md p-6 flex flex-col items-center justify-center shadow-2xl overflow-hidden group">
+          <div className="relative w-72 h-72 sm:w-85 sm:h-85 rounded-3xl border border-sand-muted/20 dark:border-sand-dark/60 bg-sand-light/10 dark:bg-sand-dark/10 backdrop-blur-md p-6 flex flex-col items-center justify-center shadow-2xl overflow-hidden group">
             {/* Ambient scanning light */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent h-[150%] -top-[25%] animate-pulse pointer-events-none" />
 
@@ -152,9 +228,9 @@ export default function LandingPage() {
               }`} />
 
               {/* Centered logo core */}
-              <div className="relative z-10 w-24 h-24 rounded-full bg-[#0d1117] border border-white/5 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-500">
+              <div className="relative z-10 w-24 h-24 rounded-full bg-white dark:bg-[#0d1117] border border-sand-muted/20 dark:border-white/5 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-500">
                 <Mic size={28} className="text-primary animate-pulse" />
-                <span className="text-[7px] font-mono tracking-widest text-ink-dark/40 uppercase mt-1">Local Core</span>
+                <span className="text-[7px] font-mono tracking-widest text-ink-light/40 dark:text-ink-dark/40 uppercase mt-1">Local Core</span>
               </div>
             </div>
 
@@ -174,20 +250,20 @@ export default function LandingPage() {
             </div>
 
             <div className="mt-4 text-center">
-              <span className="text-[9px] font-mono tracking-widest text-ink-dark/40 uppercase">AI Speech Engine Idle</span>
+              <span className="text-[9px] font-mono tracking-widest text-ink-light/40 dark:text-ink-dark/40 uppercase">AI Speech Engine Idle</span>
             </div>
           </div>
         </div>
       </header>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 border-t border-sand-dark/40">
+      <section id="how-it-works" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 border-t border-sand-muted/20 dark:border-sand-dark/40">
         <div className="reveal-on-scroll opacity-0 translate-y-12 transition-all duration-700 space-y-4 max-w-3xl text-left mb-20">
           <p className="text-xs font-bold font-mono tracking-widest text-primary uppercase">Architecture Flow</p>
-          <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink-dark leading-tight">
+          <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink-light dark:text-ink-dark leading-tight">
             Zero upload, instant local pipeline.
           </h3>
-          <p className="text-sm sm:text-base text-ink-dark/60 leading-relaxed max-w-2xl">
+          <p className="text-sm sm:text-base text-ink-light/60 dark:text-ink-dark/60 leading-relaxed max-w-2xl font-sans">
             DocMind processes files within the sandbox boundary of your web browser. Here is exactly how documents are digested and queried.
           </p>
         </div>
@@ -239,13 +315,13 @@ export default function LandingPage() {
             >
               <div className="flex justify-between items-start">
                 <span className={`font-mono text-sm font-bold ${item.stepColor}`}>{item.step}</span>
-                <div className={`p-2.5 rounded-xl bg-sand-dark/45 border border-white/5 transition-colors duration-300 ${item.iconColor}`}>
+                <div className={`p-2.5 rounded-xl bg-sand-light/45 dark:bg-sand-dark/45 border border-sand-muted/20 dark:border-white/5 transition-colors duration-300 ${item.iconColor}`}>
                   {item.icon}
                 </div>
               </div>
               <div className="space-y-3 mt-6">
-                <h4 className="font-serif text-base sm:text-lg font-bold text-ink-dark leading-tight">{item.title}</h4>
-                <p className="text-xs sm:text-sm text-ink-dark/55 leading-relaxed">{item.description}</p>
+                <h4 className="font-serif text-base sm:text-lg font-bold text-ink-light dark:text-ink-dark leading-tight">{item.title}</h4>
+                <p className="text-xs sm:text-sm text-ink-light/55 dark:text-ink-dark/55 leading-relaxed font-sans">{item.description}</p>
               </div>
             </div>
           ))}
@@ -253,13 +329,13 @@ export default function LandingPage() {
       </section>
 
       {/* Features Grid Section */}
-      <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 border-t border-sand-dark/40">
+      <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 border-t border-sand-muted/20 dark:border-sand-dark/40">
         <div className="reveal-on-scroll opacity-0 translate-y-12 transition-all duration-700 space-y-4 max-w-3xl text-left mb-20">
           <p className="text-xs font-bold font-mono tracking-widest text-primary uppercase">Specifications</p>
-          <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink-dark leading-tight">
+          <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink-light dark:text-ink-dark leading-tight">
             Complete local document intelligence.
           </h3>
-          <p className="text-sm sm:text-base text-ink-dark/60 leading-relaxed max-w-2xl">
+          <p className="text-sm sm:text-base text-ink-light/60 dark:text-ink-dark/60 leading-relaxed max-w-2xl font-sans">
             DocMind is configured with components to serve as a fast, reliable, private research workbench.
           </p>
         </div>
@@ -318,15 +394,15 @@ export default function LandingPage() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className={`reveal-on-scroll opacity-0 translate-y-12 transition-all duration-700 border border-sand-dark/75 bg-[#0f1422]/30 backdrop-blur-xs p-7.5 rounded-2xl space-y-5 hover:scale-[1.01] transition-all duration-200 group shadow-xs ${item.borderClass}`}
+              className={`reveal-on-scroll opacity-0 translate-y-12 transition-all duration-700 border border-sand-muted/20 dark:border-sand-dark/75 bg-sand-light/10 dark:bg-[#0f1422]/30 backdrop-blur-xs p-7.5 rounded-2xl space-y-5 hover:scale-[1.01] transition-all duration-200 group shadow-xs ${item.borderClass}`}
               style={{ transitionDelay: `${(idx % 3) * 100}ms` }}
             >
-              <div className={`p-3 w-11 h-11 rounded-xl border border-white/5 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform ${item.iconBg} ${item.iconColor}`}>
+              <div className={`p-3 w-11 h-11 rounded-xl border border-sand-muted/20 dark:border-white/5 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform ${item.iconBg} ${item.iconColor}`}>
                 {item.icon}
               </div>
               <div className="space-y-3">
-                <h4 className="font-serif text-base sm:text-lg font-bold text-ink-dark">{item.title}</h4>
-                <p className="text-xs sm:text-sm text-ink-dark/60 leading-relaxed">{item.description}</p>
+                <h4 className="font-serif text-base sm:text-lg font-bold text-ink-light dark:text-ink-dark">{item.title}</h4>
+                <p className="text-xs sm:text-sm text-ink-light/60 dark:text-ink-dark/60 leading-relaxed font-sans">{item.description}</p>
               </div>
             </div>
           ))}
@@ -334,10 +410,10 @@ export default function LandingPage() {
       </section>
 
       {/* Privacy / Local-First Section (Dedicated) */}
-      <section id="privacy" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 border-t border-sand-dark/40">
+      <section id="privacy" className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 border-t border-sand-muted/20 dark:border-sand-dark/40">
         <div className="reveal-on-scroll opacity-0 translate-y-12 transition-all duration-700 border border-secondary/15 bg-secondary/5 rounded-3xl p-8 md:p-14 relative overflow-hidden secure-scan max-w-5xl mx-auto shadow-lg">
           {/* Subtle tech coordinates */}
-          <span className="absolute top-4 right-6 font-mono text-[9px] text-ink-dark/20 uppercase tracking-widest hidden sm:inline">
+          <span className="absolute top-4 right-6 font-mono text-[9px] text-ink-light/20 dark:text-ink-dark/20 uppercase tracking-widest hidden sm:inline">
             SECURE BOUNDARY // LAT-00.419
           </span>
 
@@ -347,11 +423,11 @@ export default function LandingPage() {
               Privacy Protocol Active
             </div>
             
-            <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink-dark leading-tight">
+            <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink-light dark:text-ink-dark leading-tight">
               Your documents never leave your browser.
             </h3>
             
-            <p className="text-sm sm:text-base text-ink-dark/75 leading-relaxed">
+            <p className="text-sm sm:text-base text-ink-light/75 dark:text-ink-dark/75 leading-relaxed font-sans">
               Most document Q&A tools upload your files to a server and store them in a cloud database. DocMind doesn't. Parsing, embedding, and search all happen locally in your browser using IndexedDB. The only thing that leaves your device is the specific question you ask and the small snippet of text needed to answer it — never the full document, never stored anywhere but here.
             </p>
 
@@ -360,7 +436,7 @@ export default function LandingPage() {
                 href="/app"
                 className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 hover:scale-105 shadow-md shadow-primary/20"
               >
-                Launch Sandbox
+                Get Started
                 <ArrowRight size={13} />
               </Link>
             </div>
@@ -369,7 +445,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer Section */}
-      <footer id="about" className="relative z-10 border-t border-sand-dark/50 bg-[#04060a] px-6 py-14 md:py-20">
+      <footer id="about" className="relative z-10 border-t border-sand-muted/20 dark:border-sand-dark/50 bg-[#04060a]/50 dark:bg-[#04060a] px-6 py-14 md:py-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
           {/* Tagline / Logo */}
           <div className="md:col-span-5 space-y-4 text-left">
@@ -377,28 +453,31 @@ export default function LandingPage() {
               <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-primary text-white">
                 <Sparkles size={14} />
               </div>
-              <span className="font-serif text-base font-extrabold text-ink-dark">DocMind</span>
+              <span className="font-serif text-base font-extrabold text-ink-light dark:text-ink-dark">DocMind</span>
             </div>
-            <p className="text-xs text-ink-dark/45 font-serif italic max-w-xs">
-              Local-first document intelligence.
-            </p>
-            <div className="text-[10px] font-mono text-ink-dark/30 pt-4 uppercase tracking-widest">
-              &copy; {new Date().getFullYear()} DocMind. All rights preserved.
+            <div className="space-y-1">
+              <p className="text-xs text-ink-light/45 dark:text-ink-dark/45 font-serif italic max-w-xs">
+                Local-first document intelligence.
+              </p>
+            </div>
+            <div className="text-[10px] font-mono text-ink-light/35 dark:text-ink-dark/30 pt-4 uppercase tracking-widest flex items-center">
+              <span>&copy; {new Date().getFullYear()} DocMind. All rights preserved.</span>
+              <span className="ml-2.5 px-1.5 py-0.5 rounded-md bg-sand-light/30 dark:bg-sand-dark/25 border border-sand-muted/20 dark:border-white/5 font-semibold text-[8px]">v1.0.0</span>
             </div>
           </div>
 
           {/* Columns */}
           <div className="md:col-span-4 grid grid-cols-2 gap-8 text-left">
             <div className="space-y-3">
-              <h5 className="font-mono text-[9px] uppercase tracking-wider text-ink-dark/45">Routine Map</h5>
-              <ul className="space-y-2 text-xs text-ink-dark/60 font-mono">
+              <h5 className="font-mono text-[9px] uppercase tracking-wider text-ink-light/45 dark:text-ink-dark/45 font-extrabold">Product</h5>
+              <ul className="space-y-2 text-xs text-ink-light/60 dark:text-ink-dark/60 font-mono">
                 <li>
-                  <button onClick={() => scrollToSection('features')} className="hover:text-primary cursor-pointer">
+                  <button onClick={() => scrollToSection('features')} className="hover:text-primary cursor-pointer transition-colors">
                     Features
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollToSection('how-it-works')} className="hover:text-primary cursor-pointer">
+                  <button onClick={() => scrollToSection('how-it-works')} className="hover:text-primary cursor-pointer transition-colors">
                     How it works
                   </button>
                 </li>
@@ -406,17 +485,17 @@ export default function LandingPage() {
             </div>
             
             <div className="space-y-3">
-              <h5 className="font-mono text-[9px] uppercase tracking-wider text-ink-dark/45">Boundary</h5>
-              <ul className="space-y-2 text-xs text-ink-dark/60 font-mono">
+              <h5 className="font-mono text-[9px] uppercase tracking-wider text-ink-light/45 dark:text-ink-dark/45 font-extrabold">Legal</h5>
+              <ul className="space-y-2 text-xs text-ink-light/60 dark:text-ink-dark/60 font-mono">
                 <li>
-                  <button onClick={() => scrollToSection('privacy')} className="hover:text-primary cursor-pointer">
+                  <Link href="/privacy" className="hover:text-primary cursor-pointer transition-colors">
                     Privacy
-                  </button>
+                  </Link>
                 </li>
                 <li>
-                  <button onClick={() => scrollToSection('about')} className="hover:text-primary cursor-pointer">
+                  <Link href="/about" className="hover:text-primary cursor-pointer transition-colors">
                     About
-                  </button>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -425,16 +504,23 @@ export default function LandingPage() {
           {/* Socials & Credits */}
           <div className="md:col-span-3 space-y-4 text-left md:text-right">
             <div className="space-y-1">
-              <h5 className="font-mono text-[9px] uppercase tracking-wider text-ink-dark/45">Developed By</h5>
-              <div className="font-mono text-xs font-bold text-primary tracking-widest uppercase">
+              <h5 className="font-mono text-[9px] uppercase tracking-wider text-ink-light/45 dark:text-ink-dark/45 font-extrabold">Developed By</h5>
+              <a
+                href="https://github.com/ashurajs552-droid"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-xs font-bold text-primary tracking-widest uppercase hover:underline transition-all inline-block"
+              >
                 Aashuraj S
-              </div>
+              </a>
             </div>
 
-            <div className="flex items-center justify-start md:justify-end gap-3 text-ink-dark/40 pt-2">
+            <div className="flex items-center justify-start md:justify-end gap-2.5 text-ink-light/40 dark:text-ink-dark/40 pt-2">
               <a
-                href="#"
-                className="p-2 rounded-lg bg-sand-dark/45 hover:text-ink-dark border border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
+                href="https://github.com/ashurajs552-droid"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-sand-light/45 dark:bg-sand-dark/45 hover:text-ink-light dark:hover:text-ink-dark border border-sand-muted/20 dark:border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
                 title="GitHub Repository"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -442,8 +528,10 @@ export default function LandingPage() {
                 </svg>
               </a>
               <a
-                href="#"
-                className="p-2 rounded-lg bg-sand-dark/45 hover:text-ink-dark border border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
+                href="https://www.linkedin.com/in/aashu-raj-s-2b4329406?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-sand-light/45 dark:bg-sand-dark/45 hover:text-ink-light dark:hover:text-ink-dark border border-sand-muted/20 dark:border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
                 title="LinkedIn Profile"
               >
                 <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -451,8 +539,17 @@ export default function LandingPage() {
                 </svg>
               </a>
               <a
-                href="#"
-                className="p-2 rounded-lg bg-sand-dark/45 hover:text-ink-dark border border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
+                href="mailto:aashurajs552@gmail.com"
+                className="p-2 rounded-lg bg-sand-light/45 dark:bg-sand-dark/45 hover:text-ink-light dark:hover:text-ink-dark border border-sand-muted/20 dark:border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
+                title="Email Contact"
+              >
+                <Mail size={14} />
+              </a>
+              <a
+                href="https://github.com/ashurajs552-droid"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-sand-light/45 dark:bg-sand-dark/45 hover:text-ink-light dark:hover:text-ink-dark border border-sand-muted/20 dark:border-white/5 hover:border-primary/20 transition-all flex items-center justify-center"
                 title="Portfolio Website"
               >
                 <ExternalLink size={14} />
