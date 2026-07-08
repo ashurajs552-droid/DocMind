@@ -10,6 +10,7 @@ import CitationExplorer from '@/components/chat/CitationExplorer';
 import OnboardingModal from '@/components/OnboardingModal';
 import { type ChunkRecord } from '@/lib/db';
 import { Sun, Moon, Sparkles, Menu, X } from 'lucide-react';
+import { DocMindLogoFull } from '@/components/DocMindLogo';
 
 export default function MainWorkspace() {
   const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
@@ -109,7 +110,10 @@ export default function MainWorkspace() {
       </div>
 
       {/* Brand Header / Top Bar (Glassmorphic) */}
-      <header className="relative z-30 border-b border-sand-muted/40 dark:border-sand-dark/60 bg-white/70 dark:bg-[#080b11]/85 backdrop-blur-md px-4 sm:px-6 py-3.5 flex items-center justify-between shrink-0">
+      <header 
+        className="relative z-30 border-b border-sand-muted/40 dark:border-sand-dark/60 bg-white/70 dark:bg-[#080b11]/85 backdrop-blur-md px-4 sm:px-6 pb-3.5 flex items-center justify-between shrink-0"
+        style={{ paddingTop: 'calc(14px + env(safe-area-inset-top, 0px))' }}
+      >
         <div className="flex items-center gap-3">
           {/* Hamburger Menu on smaller screens */}
           <button
@@ -121,9 +125,7 @@ export default function MainWorkspace() {
           </button>
 
           <Link href="/" className="flex items-center gap-3.5 cursor-pointer group">
-            <div className="flex items-center justify-center w-10.5 h-10.5 rounded-xl bg-primary text-white shadow-md shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
-              <Sparkles size={20} />
-            </div>
+            <DocMindLogoFull />
             <div>
               <h1 className="font-serif text-xl font-extrabold tracking-tight text-ink-light dark:text-ink-dark flex items-center gap-2 group-hover:text-primary transition-colors">
                 DocMind
@@ -168,7 +170,7 @@ export default function MainWorkspace() {
       </header>
 
       {/* Main Workspace Frame */}
-      <div className="flex-1 flex overflow-hidden relative z-10">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Left column: Document Library & Upload */}
         {/* Sidebar Backdrop Overlay on Mobile */}
         {isSidebarOpen && (
@@ -182,6 +184,7 @@ export default function MainWorkspace() {
           className={`fixed inset-y-0 left-0 z-50 w-80 sm:w-96 lg:static lg:w-80 xl:w-96 border-r border-sand-muted/40 dark:border-sand-dark/60 bg-paper-light dark:bg-[#0c0e15] lg:bg-white/40 lg:dark:bg-paper-dark/30 backdrop-blur-md p-6 flex flex-col space-y-6 shrink-0 overflow-y-auto transform transition-transform duration-300 ease-in-out ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
+          style={{ paddingTop: 'calc(24px + env(safe-area-inset-top, 0px))' }}
         >
           {/* Mobile sidebar header close button */}
           <div className="flex items-center justify-between lg:hidden pb-3 border-b border-sand-muted/20 dark:border-sand-dark/20">
@@ -256,9 +259,10 @@ export default function MainWorkspace() {
         )}
         
         <aside
-          className={`fixed inset-y-0 right-0 z-50 w-85 max-w-[90vw] sm:w-96 lg:static lg:w-80 xl:w-96 shrink-0 h-full bg-paper-light dark:bg-[#0c0e15] lg:bg-white/45 lg:dark:bg-paper-dark/45 backdrop-blur-md transform transition-transform duration-300 ease-in-out border-l border-sand-muted/40 dark:border-sand-dark/60 ${
+          className={`fixed inset-y-0 right-0 z-50 w-full max-w-[325px] sm:max-w-md lg:static lg:w-80 xl:w-96 shrink-0 h-full bg-paper-light dark:bg-[#0c0e15] lg:bg-white/45 lg:dark:bg-paper-dark/45 backdrop-blur-md transform transition-transform duration-300 ease-in-out border-l border-sand-muted/40 dark:border-sand-dark/60 ${
             activeChunk ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
           } ${activeChunk ? 'block' : 'hidden lg:block'}`}
+          style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
         >
           <CitationExplorer
             activeChunk={activeChunk}

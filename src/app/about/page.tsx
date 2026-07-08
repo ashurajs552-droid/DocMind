@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, ArrowRight, Sun, Moon, Mail, ExternalLink, ShieldCheck, Compass, Code2 } from 'lucide-react';
 import OnboardingModal from '@/components/OnboardingModal';
+import { DocMindLogoFull } from '@/components/DocMindLogo';
 
 export default function AboutPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -69,12 +70,13 @@ export default function AboutPage() {
       </div>
 
       {/* Nav Bar */}
-      <nav className="relative z-50 border-b border-sand-muted/20 dark:border-sand-dark/80 bg-paper-light/80 dark:bg-[#080b11]/80 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0">
+      <nav 
+        className="relative z-50 border-b border-sand-muted/20 dark:border-sand-dark/80 bg-paper-light/80 dark:bg-[#080b11]/80 backdrop-blur-md px-6 pb-4 flex items-center justify-between sticky top-0"
+        style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 0px))' }}
+      >
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-3.5 cursor-pointer group">
-            <div className="flex items-center justify-center w-10.5 h-10.5 rounded-xl bg-primary text-white shadow-md shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
-              <Sparkles size={20} />
-            </div>
+            <DocMindLogoFull />
             <span className="font-serif text-xl font-extrabold tracking-tight text-ink-light dark:text-ink-dark group-hover:text-primary transition-colors">
               DocMind
             </span>
@@ -232,9 +234,7 @@ export default function AboutPage() {
           {/* Tagline / Logo */}
           <div className="md:col-span-5 space-y-4 text-left">
             <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-primary text-white">
-                <Sparkles size={14} />
-              </div>
+              <DocMindLogoFull className="w-7 h-7 rounded-lg" iconClassName="w-4 h-4" />
               <span className="font-serif text-base font-extrabold text-ink-light dark:text-ink-dark">DocMind</span>
             </div>
             <div className="space-y-1">
